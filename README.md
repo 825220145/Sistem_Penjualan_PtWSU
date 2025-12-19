@@ -40,4 +40,4 @@ Pengembangan sistem informasi ini bertujuan untuk:
 - Mendukung pengambilan keputusan manajemen berdasarkan informasi yang dihasilkan oleh sistem
 
 ## Keterangan
-Repository ini disediakan sebagai pendukung keperluan akademik dan tugas akhir. Seluruh source code bersifat Public agar sesuai dengan ketentuan pengumpulan yang berlaku.
+Repository ini disediakan sebagai salah satu syarat akademik dan tugas akhir. Seluruh source code bersifat Public agar sesuai dengan ketentuan pengumpulan yang berlaku.
