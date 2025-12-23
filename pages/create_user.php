@@ -4,7 +4,6 @@ session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/funcs.php';
 
-// Hanya admin yang boleh akses halaman ini
 require_role(['admin']);
 
 $message = '';
@@ -19,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirm = $_POST['confirm_password'] ?? '';
     $role = $_POST['role'] ?? 'kasir';
 
-    // validasi sederhana
     if (!$admin_password) {
         $error = 'Masukkan password admin untuk konfirmasi.';
     } elseif (!$username) {
@@ -47,19 +45,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($s->fetchColumn() > 0) {
                 $error = 'Username sudah digunakan, pilih username lain.';
             } else {
-                // siap insert
+
                 $hashed = password_hash($password, PASSWORD_BCRYPT);
                 $ins = $pdo->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
                 try {
                     $ins->execute([$username, $hashed, $role]);
 
-                    // log aktivitas (pastikan func log_activity ada)
                     if (function_exists('log_activity')) {
                         log_activity($pdo, $_SESSION['user_id'], 'Tambah User', "Buat user: {$username}, role: {$role}");
                     }
 
                     $message = "✅ Akun <b>{$username}</b> dengan role <b>{$role}</b> berhasil dibuat.";
-                    // bersihkan form
+ 
                     $username = '';
                     $role = 'kasir';
                 } catch (PDOException $e) {
@@ -93,7 +90,7 @@ small{color:#bfbfbf;}
 <div class="card">
     <a href="dashboard.php" class="back-btn">⬅ Kembali ke Dashboard</a>
   <h2>Buat Akun Baru</h2>
-  <p class="help">Hanya admin yang dapat membuat akun. Semua password disimpan aman menggunakan hashing.</p>
+  <p class="help">Hanya admin yang dapat membuat akun.</p>
 
   <?php if ($message): ?><div class="msg"><?= $message ?></div><?php endif; ?>
   <?php if ($error): ?><div class="err"><?= htmlspecialchars($error) ?></div><?php endif; ?>
@@ -121,7 +118,8 @@ small{color:#bfbfbf;}
     <button class="btn" type="submit">Buat Akun</button>
   </form>
 
-  <p class="help" style="margin-top:12px;">Catatan: username tidak boleh duplikat. Password disimpan aman menggunakan bcrypt (PHP password_hash).</p>
+  <p class="help" style="margin-top:12px;">Catatan: username tidak boleh duplikat</p>
 </div>
 </body>
 </html>
+
